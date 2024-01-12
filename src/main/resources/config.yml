@@ -1,0 +1,8 @@
+Message:
+  reload: "&a重载成功"
+MySQLSetting:
+  databaseName: "zpokestoresql"
+  ip: "localhost"
+  port: 3306
+  username: "root"
+  password: "root"

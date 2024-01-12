@@ -1,0 +1,9 @@
+name: ZPokeStoreSQL
+version: '${version}'
+main: io.github.yuazer.zpokestoresql.Main
+authors:
+  - YuaZer
+commands:
+  zpokestoresql:
+    aliases:
+      - zpss
