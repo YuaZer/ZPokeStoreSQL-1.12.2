@@ -34,12 +34,6 @@ public final class Main extends JavaPlugin {
             getLogger().severe("§c无法连接到数据库！");
             return;
         }
-        // 创建数据库（如果不存在）
-        if (!database.createDatabaseIfNotExists()) {
-            getLogger().severe("§c无法创建数据库！");
-            database.disconnect();
-            return;
-        }
         Bukkit.getPluginManager().registerEvents(new PlayerEvent(),this);
         Bukkit.getPluginCommand("zpokestoresql").setExecutor(new MainCommand());
         logLoaded(this);

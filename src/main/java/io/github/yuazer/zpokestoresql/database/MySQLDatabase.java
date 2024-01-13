@@ -15,10 +15,19 @@ public class MySQLDatabase {
 
     public MySQLDatabase(String databaseName, String ip, int port, String username, String password) {
         this.databaseName = databaseName;
-        this.url = "jdbc:mysql://" + ip + ":" + port + "/" + databaseName + "?useSSL=false";
+        this.url = "jdbc:mysql://" + ip + ":" + port + "?useSSL=false";
         this.username = username;
         this.password = password;
         this.connection = null;
+
+        // 在初始化时检测数据库是否存在，如果不存在则创建
+        if (!checkDatabaseExists()) {
+            if (createDatabase()) {
+                System.out.println("§a数据库 §b" + databaseName + " §a创建成功。");
+            } else {
+                System.err.println("无法创建数据库 " + databaseName + "。");
+            }
+        }
     }
 
     public boolean connect() {
@@ -31,10 +40,31 @@ public class MySQLDatabase {
         }
     }
 
-    public boolean createDatabaseIfNotExists() {
+    // 其他方法不变...
+
+    // 检测数据库是否存在
+    private boolean checkDatabaseExists() {
         try {
-            Connection conn = DriverManager.getConnection("jdbc:mysql://" + url, username, password);
-            PreparedStatement statement = conn.prepareStatement("CREATE DATABASE IF NOT EXISTS " + databaseName);
+            Connection conn = DriverManager.getConnection(url, username, password);
+            PreparedStatement statement = conn.prepareStatement("SHOW DATABASES LIKE ?");
+            statement.setString(1, databaseName);
+            ResultSet resultSet = statement.executeQuery();
+            boolean exists = resultSet.next();
+            resultSet.close();
+            statement.close();
+            conn.close();
+            return exists;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 创建数据库
+    private boolean createDatabase() {
+        try {
+            Connection conn = DriverManager.getConnection(url, username, password);
+            PreparedStatement statement = conn.prepareStatement("CREATE DATABASE " + databaseName);
             statement.executeUpdate();
             statement.close();
             conn.close();
