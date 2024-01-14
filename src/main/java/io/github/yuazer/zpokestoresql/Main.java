@@ -30,10 +30,6 @@ public final class Main extends JavaPlugin {
         String password = YamlUtils.getConfigMessage("MySQLSetting.password");
         database = new MySQLDatabase(
                 databaseName, ip, port, username, password);
-        if (!database.connect()) {
-            getLogger().severe("§c无法连接到数据库！");
-            return;
-        }
         Bukkit.getPluginManager().registerEvents(new PlayerEvent(),this);
         Bukkit.getPluginCommand("zpokestoresql").setExecutor(new MainCommand());
         logLoaded(this);
@@ -41,6 +37,7 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        database.disconnect();
         logDisable(this);
     }
     public static void logLoaded(JavaPlugin plugin) {

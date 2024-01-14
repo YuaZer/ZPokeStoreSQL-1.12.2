@@ -34,6 +34,9 @@ public class PlayerEvent implements Listener {
         Player player = event.getPlayer();
         PlayerPartyStorage pps = Pixelmon.storageManager.getParty(player.getUniqueId());
         MySQLDatabase.PlayerData playerData = Main.getDatabase().getPlayerData(player.getUniqueId().toString());
+        if (playerData==null){
+            return;
+        }
         NBTTagCompound partyTag = NBTUtils.deserializeNBT(playerData.getPartyStore());
         NBTTagCompound pcTag = NBTUtils.deserializeNBT(playerData.getPcStore());
         pps.readFromNBT(partyTag);
