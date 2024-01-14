@@ -10,10 +10,11 @@ public class MySQLDatabase {
     private String username;
     private String password;
     private Connection connection;
-
+    private String urlOrginal;
     public MySQLDatabase(String databaseName, String ip, int port, String username, String password) {
         this.databaseName = databaseName;
         this.url = "jdbc:mysql://" + ip + ":" + port +"/"+ databaseName+"?useSSL=false";
+        this.urlOrginal = "jdbc:mysql://" + ip + ":" + port +"?useSSL=false";
         this.username = username;
         this.password = password;
         this.connection = null;
@@ -46,7 +47,7 @@ public class MySQLDatabase {
     // 检测数据库是否存在
     private boolean checkDatabaseExists() {
         try {
-            Connection conn = DriverManager.getConnection(url, username, password);
+            Connection conn = DriverManager.getConnection(urlOrginal, username, password);
             PreparedStatement statement = conn.prepareStatement("SHOW DATABASES LIKE ?");
             statement.setString(1, databaseName);
             ResultSet resultSet = statement.executeQuery();
@@ -67,7 +68,7 @@ public class MySQLDatabase {
             return true; // 数据库已经存在，无需创建
         }
         try {
-            Connection conn = DriverManager.getConnection(url, username, password);
+            Connection conn = DriverManager.getConnection(urlOrginal, username, password);
             PreparedStatement statement = conn.prepareStatement("CREATE DATABASE " + databaseName);
             statement.executeUpdate();
             statement.close();
@@ -79,6 +80,7 @@ public class MySQLDatabase {
             return false;
         }
     }
+
 
 
     public void disconnect() {
@@ -96,7 +98,6 @@ public class MySQLDatabase {
             // 选择要执行操作的数据库
             Statement useDbStatement = conn.createStatement();
             useDbStatement.close();
-
             Statement statement = conn.createStatement();
             String createTableSQL = "CREATE TABLE IF NOT EXISTS player_data (" +
                     "uuid VARCHAR(36) PRIMARY KEY," +
