@@ -25,7 +25,7 @@ public class PlayerEvent implements Listener {
         PCStorage pcs = Pixelmon.storageManager.getPCForPlayer(player.getUniqueId());
         pps.writeToNBT(partyTag);
         pcs.writeToNBT(pcTag);
-        Main.getDatabase().setPlayerData(player.getUniqueId().toString(), NBTUtils.serializeNBT(partyTag), NBTUtils.serializeNBT(pcTag));
+        Main.getDatabase().setPlayerData(player.getName(), NBTUtils.serializeNBT(partyTag), NBTUtils.serializeNBT(pcTag));
         Main.getInstance().getLogger().info("§b玩家:§a" + player.getName() + "§b宝可梦数据保存成功");
     }
 
@@ -33,7 +33,7 @@ public class PlayerEvent implements Listener {
     public void onJoin(PlayerJoinEvent event) throws IOException {
         Player player = event.getPlayer();
         PlayerPartyStorage pps = Pixelmon.storageManager.getParty(player.getUniqueId());
-        MySQLDatabase.PlayerData playerData = Main.getDatabase().getPlayerData(player.getUniqueId().toString());
+        MySQLDatabase.PlayerData playerData = Main.getDatabase().getPlayerData(player.getName());
         if (playerData==null){
             return;
         }
