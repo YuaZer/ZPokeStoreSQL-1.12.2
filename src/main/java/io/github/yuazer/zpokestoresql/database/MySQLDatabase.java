@@ -102,7 +102,7 @@ public class MySQLDatabase {
             String createTableSQL = "CREATE TABLE IF NOT EXISTS player_data (" +
                     "uuid VARCHAR(36) PRIMARY KEY," +
                     "party_store BLOB," +
-                    "pc_store BLOB" +
+                    "pc_store LONGBLOB" +
                     ")";
             statement.executeUpdate(createTableSQL);
             statement.close();
